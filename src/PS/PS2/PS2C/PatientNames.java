@@ -18,12 +18,15 @@ class PatientNames {
         final int MALE = 1 ;
         final int FEMALE = 2 ;
         int gender ;
+        int height;
+
         Patient left , right , parent ;
         public Patient(String name , int gender){
             if(name.toUpperCase().trim().length()<30) { this.name = name.toUpperCase().trim(); }
             else{ System.out.println(name+" is longer than 30 characters"); System.exit(-1);}
             if(gender==1 || gender== 2){ this.gender = gender ; }
             else{ System.out.println(" Wrong gender code") ; System.exit(-1);}
+            this.height = 1 ;
         }
 
         public String getName() { return name; }
@@ -36,6 +39,8 @@ class PatientNames {
         public void setRight(Patient right) { this.right = right; }
         public Patient getParent() { return parent; }
         public void setParent(Patient parent) { this.parent = parent; }
+        public int getHeight() { return height; }
+        public void setHeight(int height) { this.height = height; }
     }
 
 
@@ -101,6 +106,30 @@ class PatientNames {
             } else if (newPatient.getName().compareTo(trailingPointer.getName()) < 0) {
                 trailingPointer.setLeft(newPatient);
             }
+
+            newPatient.setHeight(1+ max(getHeight(newPatient.getLeft()) , getHeight(newPatient.getRight())));
+            int balanceFactor = getBalanceFactor(newPatient) ;
+
+            // left left case
+            if((balanceFactor> 1) && (newPatient.getName().compareTo(newPatient.getLeft().getName())<0)){
+                rightRotate(newPatient) ;
+            }
+
+            // right right case
+            if((balanceFactor<-1) && (newPatient.getName().compareTo(newPatient.getRight().getName())> 0 )){
+                leftRotate(newPatient);
+            }
+
+            //left right
+            if ((balanceFactor>1) && (newPatient.getName().compareTo(newPatient.getLeft().getName())>0)){
+                rightRotate(newPatient);
+            }
+
+            // right left
+            if((balanceFactor<-1) && (newPatient.getName().compareTo(newPatient.getRight().getName())>0)){
+                leftRotate(newPatient);
+            }
+
         }
         else{
             System.out.println("Patient of the same name is already added");
@@ -123,6 +152,56 @@ class PatientNames {
     }
 
 
+
+
+
+
+
+    public int getHeight(Patient patient){
+        if(patient==null){return 0; }
+        return patient.getHeight();
+    }
+
+    public int max(int a , int b){
+        return (a>b)? a:b ;
+    }
+
+    public Patient rightRotate(Patient patient){
+        Patient left = patient.getLeft()  ;
+        Patient right= left.getRight() ;
+
+        left.setRight(patient);
+        patient.setLeft(right);
+        //update heights
+        patient.setHeight(max(getHeight(patient.getLeft()) , getHeight(patient.getRight()) ) + 1 ) ;
+        left.setHeight(max(getHeight(left.getLeft()) , getHeight(left.getRight()) ) + 1);
+
+        return left ;
+    }
+    public Patient leftRotate(Patient patient){
+        Patient right = patient.getRight() ;
+        Patient leftSub = right.getLeft() ;
+
+        right.setLeft(patient);
+        patient.setRight(leftSub) ;
+
+        patient.setHeight(max(getHeight(patient.getLeft()) , getHeight(patient.getRight())) + 1);
+        right.setHeight(max(getHeight(right.getLeft()), getHeight(right.getLeft()))+1);
+
+        return  right ;
+    }
+
+    public int getBalanceFactor(Patient p){
+        if(p==null)
+            return 0;
+        return (getHeight(p.getLeft()) - getHeight(p.getRight())) ;
+    }
+
+
+
+
+
+
     public Patient findSuccessor(Patient patient){
         Patient parent = null ;
         if(patient.getRight()!=null){ findMinimum(patient) ; }
@@ -136,6 +215,10 @@ class PatientNames {
         }
         return  parent ;
     }
+
+
+
+
     public Patient findMinimum(Patient node){
         Patient minimum = node ;
         while(minimum.getLeft()!=null){minimum = minimum.getLeft() ;}
@@ -154,6 +237,11 @@ class PatientNames {
         else { toBeReplaced.getParent().setRight(replacement); }
         if(replacement!=null){replacement.setParent(toBeReplaced.getParent());}
     }
+
+
+
+
+
     void RemovePatient(String patientName) {
         Patient malePatientToBeDeleted  = searchPatient(getRootPatient(), patientName , 1) ;
         Patient femalePatientToBeDeleted= searchPatient(getRootPatient(), patientName , 2) ;
@@ -192,6 +280,11 @@ class PatientNames {
                 }
             }
         }
+
+        if (getRootPatient()==null)
+                return ;
+
+
     }
 
     void inorderTraversal(){
