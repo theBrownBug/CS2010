@@ -15,23 +15,35 @@ import java.io.*;
 class PatientNames {
     class Patient implements Comparable<Patient>{
         String name ;
+        int hashCode ;
         int gender ;
+        int rank ;
         public Patient(String name , int gender){
-            if(name.toUpperCase().trim().length()<30) { this.name = name.toUpperCase().trim(); }
+            if(name.toUpperCase().trim().length()<30) {
+                this.name = name.toUpperCase().trim();
+                this.hashCode = getName().hashCode() ;
+            }
             else{ System.out.println(name+" is longer than 30 characters"); System.exit(-1);}
             if(gender==1 || gender== 2){ this.gender = gender ; }
-            else{ System.out.println(" Wrong gender code") ; System.exit(-1);}
+            else{ System.out.println(" Wrong gender code") ; System.exit(-1);
+            }
+
         }
+
 
         public String getName() { return name; }
         public void setName(String name) { this.name = name; }
         public int getGender() { return gender; }
         public void setGender(int gender) { this.gender = gender; }
 
+
+
         @Override
         public int compareTo(Patient o) {
-            return  (this.getName().compareTo(o.getName())) ;
+            return  this.getName().compareTo(o.getName()) ;
         }
+
+
 
 
         public boolean validPosition(String START, String END){
@@ -59,45 +71,47 @@ class PatientNames {
                         return true;
                 }
             }
-            /*
-            int counter = 0;
-            while(counter <= minStartComparison){
-                if(startCharArray[counter] <= nameCharArray[counter]){
-                    counter ++;
-                    continue ;
-                }
-                else{ condition = false;  return  condition ; }
-
-            }
-
-            counter = 0 ;
-            if(condition){
-                while (counter<= minEndComparison){
-                    if(endCharArray[counter]>= nameCharArray[counter]){
-                        counter++ ;
-                        continue;
-                    }
-                    else{condition = false ;  return  condition ; }
-                }
-            }
-            return  condition ;
-            */
             return  false ;
        }
 
     }
+
+
     TreeSet<Patient> tree = new TreeSet<>() ;
+    TreeMap<String, Patient> map = new TreeMap<>() ;
+    //TreeMap<Integer,Patient> patientMap = new TreeMap<>() ;
+    //TreeMap<String, Integer> ageMapMale = new TreeMap<>() ;
+    //TreeMap<String, Integer> ageMapFemale = new TreeMap<>() ;
+
+
 
     public void AddPatient(String name,  int gender){
-        if(!contains(name.toUpperCase().trim())) {
+        if(!contains(name)){
             tree.add(new Patient(name, gender));
+            name = name.toUpperCase().trim();
+            map.put(name, new Patient(name,gender)) ;
+
+
+            //if(gender==1){ageMapMale.put(name,gender) ; }
+            //else{ageMapFemale.put(name,gender) ; }
+            //patientMap.put(name.hashCode(),new Patient(name,gender)) ;
         }else{
             System.out.println("Patient with the same name is already present");
             System.exit(-1);
         }
     }
 
+
     private boolean contains(String name){
+        name = name.toUpperCase().trim() ;
+        if(map.containsKey(name)) {
+            //if (patientMap.containsKey(map.get(name))) {
+                //if(patientMap.get(name.hashCode())!=null)
+                    return true;
+            //}
+        }
+        return false;
+        /*
         Iterator iterator = tree.iterator() ;
         while(iterator.hasNext()){
             Patient patient = (Patient) iterator.next() ;
@@ -106,11 +120,16 @@ class PatientNames {
             }
         }
         return  false;
+        */
+
     }
 
     private Patient searchPatient(String name){
         Patient present = null;
         if(contains(name.trim().toUpperCase())){
+            //present = patientMap.get(name.trim().toUpperCase().hashCode()) ;
+            present = map.get(name) ;
+            /*
             Iterator iterator = tree.iterator() ;
             while(iterator.hasNext()){
                 Patient current = (Patient) iterator.next() ;
@@ -118,6 +137,7 @@ class PatientNames {
                     present = current ;
                 }
             }
+           */
         }
         return present ;
     }
@@ -128,6 +148,8 @@ class PatientNames {
         if(contains(name)){
             Patient searched = searchPatient(name.toUpperCase().trim()) ;
             tree.remove(searched) ;
+            map.remove(name) ;
+            //patientMap.remove(name.toUpperCase().trim().hashCode()) ;
         }
         else{
             System.out.println("The patient is not present");
@@ -140,7 +162,39 @@ class PatientNames {
             System.out.println("Wrong gender");
             return  ans;
         }
+        START = START.toUpperCase().trim();
+        END = END.toUpperCase().trim() ;
+        NavigableMap<String,Patient> subMap = map.subMap(START,true,END,false) ;
+        //NavigableMap<String,Integer> subMapMale = ageMapMale.subMap(START,true,END,false) ;
+        //NavigableMap<String,Integer> subMapFemale = ageMapFemale.subMap(START,true,END,false) ;
 
+        /*
+        if((START.hashCode()- END.hashCode())<=0){
+            subMap  = patientMap.subMap(START.hashCode(), END.hashCode()) ;
+        }
+        else{
+            int min = (START.hashCode()> END.hashCode())? END.hashCode(): START.hashCode() ;
+            int max = (START.hashCode()>END.hashCode())? START.hashCode(): END.hashCode() ;
+            subMap= patientMap.subMap(min , max) ;
+        }
+        */
+        if(gender==0){
+            return subMap.size() ;
+        }
+        //else if(gender==1){ return subMapMale.size() ; }
+        else{
+         //   return  subMapFemale.size() ;
+            /*
+            Object[] list = subMap.values().toArray() ;
+            for(Object p :list){
+                if(((Patient)p).getGender()==gender){
+                    ans+=  1 ;
+                }
+            }*/
+
+        }
+
+        /*
         Iterator iterator = tree.iterator() ;
         while(iterator.hasNext()){
             Patient currentPatient = (Patient) iterator.next() ;
@@ -155,6 +209,7 @@ class PatientNames {
             }
 
         }
+        */
         return  ans ;
     }
 

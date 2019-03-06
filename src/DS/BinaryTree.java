@@ -5,8 +5,7 @@ import java.util.Scanner;
 /**
  * this binary tree assumes that no two keys have the same value
  * */
-
-public class BinaryTree {
+class BinaryTree {
     public class Node {
         public Node right , left, parent ;
         public int key ;
@@ -146,6 +145,7 @@ public class BinaryTree {
         Scanner input = new Scanner(System.in) ;
         BinaryTree tree = null ;
         int iterator =  0 ;
+        /*
         do{
             System.out.println("Select one of the options : ") ;
             System.out.println("1.  Create a random tree  with random number of nodes");
@@ -235,7 +235,37 @@ public class BinaryTree {
             }
 
         }
-        while(iterator!= -1) ;
+        while(iterator!= -1) ;*/
+
+        BinaryTree binaryTree = new BinaryTree(20) ;
+        BinaryTree.Node n1 = binaryTree.new Node(40) ; // right child of the root
+        BinaryTree.Node n2 = binaryTree.new Node(10) ;
+        n1.setParent(binaryTree.getRoot());
+        n2.setParent(binaryTree.getRoot());
+        binaryTree.getRoot().setRight(n1);
+        binaryTree.getRoot().setLeft(n2);
+
+        BinaryTree.Node n3 = binaryTree.new Node(8) ;
+        BinaryTree.Node n4 = binaryTree.new Node(11) ;
+        n3.setParent(n2);
+        n4.setParent(n2);
+        n2.setLeft(n3);
+        n2.setRight(n4);
+
+
+        BinaryTree.Node n5 = binaryTree.new Node(45) ;
+        BinaryTree.Node n6 = binaryTree.new Node(35) ;
+
+
+
+        BinaryTree.Node n7 = binaryTree.new Node(40) ;
+        BinaryTree.Node n8 = binaryTree.new Node(40) ;
+        BinaryTree.Node n9 = binaryTree.new Node(40) ;
+
+
+
+
 
     }
+
 }

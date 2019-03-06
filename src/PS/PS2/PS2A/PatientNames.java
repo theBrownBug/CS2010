@@ -9,7 +9,7 @@ import java.io.*;
 // write list of collaborators here: Cormen, GeeksForGeeks
 // year 2018 hash code: J4u8VaADhrUGvfqZXgNb (do NOT delete this line)
 
-// PS2 A
+// PS2 C
 
 class PatientNames {
     class Patient implements Comparable<Patient>{
