@@ -12,6 +12,8 @@ class HospitalRenovation {
     private int V; // number of vertices in the graph (number of rooms in the hospital)
     private int[][] AdjMatrix; // the graph (the hospital)
     private int[] RatingScore; // the weight of each vertex (rating score of each room)
+    int time = 0 ;
+
 
     // if needed, declare a private data structure here that
     // is accessible to all methods in this class
@@ -27,25 +29,65 @@ class HospitalRenovation {
 
     int Query() {
         int ans = 0;
+        boolean[] visited = new boolean[V] ;
+        int[] timeOfDiscovery = new int[V] ;
+        int[] lowestTOD = new int[V] ;
+        int[] parent = new int[V] ;
+        boolean[] criticalPoints = new boolean[V] ;// to store all the critical points
 
-        // You have to report the rating score of the critical room (vertex)
-        // with the lowest rating score in this hospital
-        //
-        // or report -1 if that hospital has no critical room
-        //
-        // write your answer here
+        for(int i = 0  ; i <V ; i++){
+            parent[i] = -1 ;
+            visited[i] = false ;
+            criticalPoints[i] = false ;
 
+        }
+        for(int i = 0 ;  i< V ; i++){
+            if(visited[i]==false){
+                criticalPointsFind(i, visited, timeOfDiscovery, lowestTOD , parent, criticalPoints) ;
+            }
+        }
 
+        ans = Integer.MAX_VALUE ;
+        for(int i = 0 ; i< V ; i++){
+            if(criticalPoints[i]){
+                if(RatingScore[i]< ans)
+                    ans = RatingScore[i] ;
+            }
+        }
 
         return ans;
     }
 
-    // You can add extra function if needed
-    // --------------------------------------------
+    // extra function
+    public void criticalPointsFind(int i , boolean[] visited , int[] tod , int[] lowestTod , int[] parent , boolean[] cp){
+
+        int childrenCount = 0 ;
+        visited[i] = true;
+        tod[i] = ++ this.time;
+        for(int row = 0 ; row< V ; row++){
+            for(int column = 0; column<V ; column++){
+                int v = AdjMatrix[row][column] ;
+                if (!visited[v]){
+                    childrenCount++ ;
+                    parent[v] = i;
+                    criticalPointsFind(i, visited , tod, lowestTod , parent, cp);
+                    lowestTod[i] = Math.min(lowestTod[i] , lowestTod[v]) ;
+                    // if the current node is the root node and has 2 children
+                    if(parent[i]==-1 && childrenCount>1){ cp[i] = true ; }
+
+                    if(parent[i]!= -1 && lowestTod[v]>= tod[i]){
+                        cp[i] = true;
+                    }
+                }
+
+                else if(v!=parent[i]){
+                    lowestTod[i] = Math.min(lowestTod[i] , lowestTod[v])  ;
+                }
+            }
+        }
 
 
-
-    // --------------------------------------------
+    }
 
     void run() throws Exception {
         // for this PS3, you can alter this method as you see fit
@@ -68,6 +110,11 @@ class HospitalRenovation {
             for (int i = 0; i < V; i++) {
                 st = new StringTokenizer(br.readLine());
                 int k = Integer.parseInt(st.nextToken());
+                /*
+                *
+                * Doesn't k < V needs to be true always?
+                *
+                * */
                 while (k-- > 0) {
                     int j = Integer.parseInt(st.nextToken());
                     AdjMatrix[i][j] = 1; // edge weight is always 1 (the weight is on vertices now)
