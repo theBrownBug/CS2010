@@ -1,4 +1,4 @@
-package PS3;
+//package PS3;
 // Copy paste this Java Template and save it as "HospitalRenovation.java"
 import java.util.*;
 import java.io.*;
@@ -20,94 +20,39 @@ class HospitalRenovation {
     boolean[] AP ;
 
 
+    // for normal approach
+    boolean[] visitedDFSNormal ;
+    boolean[] criticalPointArray ;
+    // contains all the neighbor lists of the each node
+    public LinkedList<Integer> adjListArray[] ;
+
+
+
+
     // if needed, declare a private data structure here that
     // is accessible to all methods in this class
+
+
+
+
 
     public HospitalRenovation() {
 
     }
-
-    int QuerySample() {
-        int ans = 0;
-        boolean[] visited = new boolean[V] ;
-        int[] timeOfDiscovery = new int[V] ;
-        int[] lowestTOD = new int[V] ;
-        int[] parent = new int[V] ;
-        boolean[] criticalPoints = new boolean[V] ;// to store all the critical points
-
-        for(int i = 0  ; i <V ; i++){
-            parent[i] = -1 ;
-            visited[i] = false ;
-            criticalPoints[i] = false ;
-
-        }
-        for(int i = 0 ;  i< V ; i++){
-            if(visited[i]==false){
-                criticalPointsFind(i, visited, timeOfDiscovery, lowestTOD , parent, criticalPoints) ;
-            }
-        }
-
-        ans = Integer.MAX_VALUE ;
-        for(int i = 0 ; i< V ; i++){
-            if(criticalPoints[i]){
-                if(RatingScore[i]< ans)
-                    ans = RatingScore[i] ;
-            }
-        }
-
-        return ans;
-    }
-
-
-
-    // extra function
-    public void criticalPointsFind(int i , boolean[] visited , int[] tod , int[] lowestTod , int[] parent , boolean[] cp){
-
-        int childrenCount = 0 ;
-        visited[i] = true;
-        tod[i] = ++ this.time;
-        for(int row = 0 ; row< V ; row++){
-            for(int column = 0; column<V ; column++){
-                int v = AdjMatrix[row][column] ;
-                if (!visited[v]){
-                    childrenCount++ ;
-                    parent[v] = i;
-                    criticalPointsFind(i, visited , tod, lowestTod , parent, cp);
-                    lowestTod[i] = Math.min(lowestTod[i] , lowestTod[v]) ;
-                    // if the current node is the root node and has 2 children
-                    if(parent[i]==-1 && childrenCount>1){ cp[i] = true ; }
-
-                    if(parent[i]!= -1 && lowestTod[v]>= tod[i]){
-                        cp[i] = true;
-                    }
-                }
-
-                else if(v!=parent[i]){
-                    lowestTod[i] = Math.min(lowestTod[i] , lowestTod[v])  ;
-                }
-            }
-        }
-
-
-    }
-
-
-
-
 
 
 
     public void ArticulationPoints(int[][] adjMatrix , int[] timeOfDisc , int[] low , boolean[] visited , int[] parent , boolean[] AP , int vertex , int numVertices){
 
         visited[vertex] = true;
-        timeOfDisc[vertex] = low[vertex] = time + 1;
+        timeOfDisc[vertex] = low[vertex] = ++time ;
         int numberOfChildren = 0;
         for(int counter = 0; counter< numVertices ; counter++){
             if(adjMatrix[vertex][counter] == 1){
-                if(visited[counter]==false){
+                if(!visited[counter]){
                     numberOfChildren+=1 ;
                     parent[counter] = vertex ;
-                    time+= 1 ;
+                    //time+= 1 ;
                     ArticulationPoints(adjMatrix , timeOfDisc , low , visited , parent , AP , counter,numVertices);
                     low[vertex]= Math.min(low[vertex] , low[counter]) ;
 
@@ -115,7 +60,7 @@ class HospitalRenovation {
                     if(parent[vertex]== Integer.MIN_VALUE  && numberOfChildren> 1){
                         AP[vertex] = true ;
                     }
-                    if(parent[vertex]!=Integer.MIN_VALUE && low[counter]> timeOfDisc[vertex]){
+                    if(parent[vertex]!=Integer.MIN_VALUE && low[counter]>= timeOfDisc[vertex]){
                         AP[vertex] = true ;
                     }
                 }
@@ -130,6 +75,12 @@ class HospitalRenovation {
 
 
     int Query(){
+        if(V==0){
+            return  -1 ;
+        }
+
+        // articulation points approach(O(V+E))
+
         int ans = Integer.MAX_VALUE;
         ArticulationPoints(AdjMatrix , timeOfDisc , low , visited , parent , AP , 0 , V);
 
@@ -146,7 +97,103 @@ class HospitalRenovation {
 
         return  ans ;
 
+
+        /*
+        // normal approach
+        int ans = 0;
+        convertToLinkedList(AdjMatrix);
+        DFS(0);
+        int lowestRating = Integer.MAX_VALUE ;
+        for(int counter = 0 ; counter < V ; counter++){
+            if(criticalPointArray[counter]) {
+                if (RatingScore[counter]< lowestRating){
+                    lowestRating = RatingScore[counter] ;
+                }
+            }
+        }
+        ans = lowestRating ;
+        if (lowestRating== Integer.MAX_VALUE){
+            ans = -1 ;
+        }
+
+        return ans;
+        */
     }
+
+
+    /*
+
+    public void convertToLinkedList(int[][] adjMatrix){
+        for(int row = 0 ; row<V ; row++){
+            for(int column = 0; column < V; column++){
+                if(adjMatrix[row][column]==1)
+                    adjListArray[row].add(column) ;
+            }
+        }
+    }
+    */
+
+    /**
+     * v        int         current node
+     * visited  boolean     array representing whether the node has been visited or not
+     *
+     * */
+    /*
+    void DFSHelper(int v , boolean[] visited , int toBeSkipped){
+
+        visited[v] = true ;
+        Iterator<Integer> iterator = adjListArray[v].listIterator() ;
+        while(iterator.hasNext()){
+            int nextNode = iterator.next() ;
+            if(nextNode==toBeSkipped){
+                continue;
+            }
+            if(!visited[nextNode])
+                DFSHelper(nextNode , visited , toBeSkipped);
+        }
+    }
+
+    */
+
+    /*
+    void DFS(int v ){
+        /*
+        *
+        * for every vertex to be skipped ini initialise the visited array again ,and after that
+        * calculate the number of true in each iteration of DFS
+        *
+        * */
+    /*
+        for(int toBeSkipped = 0 ; toBeSkipped<V ; toBeSkipped++) {
+            //reset count for each iteration
+            int count = 0;
+
+            // reset the visited array for each iteration
+            for(int i = 0; i < V ; i++){
+                visitedDFSNormal[i] = false ;
+            }
+
+            if (v != toBeSkipped){
+                DFSHelper(v, visitedDFSNormal, toBeSkipped);
+            }
+            else{
+                DFSHelper(v+1 , visitedDFSNormal , toBeSkipped);
+            }
+
+            for(int i = 0; i< V ; i++){
+                if(visitedDFSNormal[i]){
+                    count += 1;
+                }
+            }
+            // if the number of vertices visited using DFS and skipping an element is less than V-1 then it creates
+            // at least 1 components
+            if(count<V-1){
+                criticalPointArray[toBeSkipped] = true ;
+            }
+        }
+    }
+
+    */
 
     void run() throws Exception {
         // for this PS3, you can alter this method as you see fit
@@ -160,6 +207,19 @@ class HospitalRenovation {
 
             StringTokenizer st = new StringTokenizer(br.readLine());
             // read rating scores, A (index 0), B (index 1), C (index 2), ..., until the V-th index
+
+            /*
+            // normal approach
+            // initialise the adj list
+            //this is a vector of the size of the number of vertices
+            adjListArray = new LinkedList[V] ;
+            visitedDFSNormal = new boolean[V] ;
+            criticalPointArray = new boolean[V] ;
+            for(int counter = 0 ; counter< V ; counter++){
+                adjListArray[counter] = new LinkedList<>() ;
+            }
+            */
+            // uncomment for articulation point approach
 
 
             timeOfDisc = new int[V] ;
@@ -175,6 +235,8 @@ class HospitalRenovation {
                 low[i] = Integer.MAX_VALUE ;
                 parent[i] = Integer.MIN_VALUE ;
             }
+
+
 
 
             RatingScore = new int[V];
