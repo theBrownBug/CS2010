@@ -2,10 +2,7 @@ package Graph;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-/*
-*
-* Assuming that the graph provided is a connected graph with only 1 component
-* */
+
 public class DiGraph {
 
     LinkedList adjList[] ;
@@ -57,6 +54,12 @@ public class DiGraph {
     public void DFS(int source){
         boolean[] visited = new boolean[V] ;
         DFSHelper(source, visited);
+        
+        // traverses through all the disconnected components as well
+        for(int i = 0 ; i<V ; i++){
+            if(!visited[i]){
+            }   DFSUtil(i, visited); 
+        }
     }
 
     public void DFSHelper(int source , boolean[] visited){
