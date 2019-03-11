@@ -12,6 +12,9 @@ public class DiGraph {
     int[][] adjMatrix ;
     int V ;
 
+    // for bipartite graphs
+    enum Color{ RED , BLUE};
+
     public DiGraph(int v){
         this.V = v ;
         this.adjList = new LinkedList[V] ;
@@ -72,4 +75,39 @@ public class DiGraph {
             }
         }
     }
+
+
+
+    // cycle detection using DFS for undirected graphs
+    boolean cycleDetection(int node , boolean[] visited , int parent){
+
+        visited[node] = true ;
+        Integer i ;
+        Iterator<Integer> it = adjList[node].iterator() ;
+        while(it.hasNext()){
+            i = it.next() ;
+            if(!visited[i]){
+                if (cycleDetection(i, visited , node))
+                    return true ;
+            }
+            else if(parent!= i )
+                return  true ;
+        }
+        return false ;
+    }
+
+    boolean isCyclic(){
+        boolean[] visited = new boolean[V] ;
+        for(int i = 0; i<V ; i++)
+            visited[i] = false ;
+        for(int i= 0 ; i<V ; i++){
+            if(!visited[i])
+                if (cycleDetection(i,visited , -1) )
+                    return true ;
+        }
+        return  false ;
+    }
+
+
+
 }
