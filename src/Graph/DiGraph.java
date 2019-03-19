@@ -3,10 +3,8 @@ package Graph;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-/*
-*
-* Assuming that the graph provided is a connected graph with only 1 component
-* */
+import java.util.Stack;
+
 public class DiGraph {
 
     LinkedList adjList[] ;
@@ -42,26 +40,6 @@ public class DiGraph {
     }
 
 
-
-    public void BFS(int source){
-        boolean[] visited = new boolean[V];
-
-        LinkedList<Integer> queue = new LinkedList<Integer>() ;
-        visited[source]= true ;
-        queue.add(source) ;
-        while(queue.size()!=0){
-
-            int currentNode = queue.poll() ;
-            System.out.println(currentNode);
-
-            Iterator<Integer> iterator = adjList[currentNode].listIterator() ;
-            while(iterator.hasNext()){
-                int childNode = iterator.next() ;
-                visited[childNode] = true ;
-                queue.add(childNode) ;
-            }
-        }
-    }
 
     /*
     *
@@ -134,6 +112,12 @@ public class DiGraph {
     public void DFS(int source){
         boolean[] visited = new boolean[V] ;
         DFSHelper(source, visited);
+        
+        // traverses through all the disconnected components as well
+        for(int i = 0 ; i<V ; i++){
+            if(!visited[i]){
+            }   DFSHelper(i, visited);
+        }
     }
 
     public void DFSHelper(int source , boolean[] visited){
@@ -180,6 +164,45 @@ public class DiGraph {
                     return true ;
         }
         return  false ;
+    }
+
+
+
+    /*
+    * topological sort
+    * */
+
+    public void topologicalSortHelper( int vertex , boolean[] visited , Stack stack ){
+        visited[vertex] = true ;
+        Integer i ;
+        Iterator<Integer> it = adjList[vertex].listIterator() ;
+        while(it.hasNext()){
+            i = it.next() ;
+            if(!visited[i])
+                topologicalSortHelper(i, visited , stack);
+        }
+
+        stack.push(vertex) ;
+    }
+
+
+    public void topologicalSort(){
+        Stack stack  = new Stack() ;
+        boolean[] visited = new boolean[V] ;
+        for(boolean i: visited)
+            i = false ;
+      for(int counter = 0 ; counter< V ; counter++)
+      {
+        if(!visited[counter])
+        {
+            topologicalSortHelper(counter , visited, stack);
+        }
+      }
+
+      while(!stack.empty())
+      {
+          System.out.println(stack.pop() + " ");
+      }
     }
 
 
