@@ -5,11 +5,13 @@ package Graph;
  * Contains methods to detect bipartite graphs , detect cycle
  * */
 import javax.sound.sampled.Line;
+import java.lang.management.GarbageCollectorMXBean;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Graph {
     private int V ;
+    private int E ; // number of Edges
     private LinkedList<Integer> adjListArray[] ;
     private int[][] adjMatrix ;
 
@@ -36,6 +38,13 @@ public class Graph {
             }
         }
     }
+
+    public Graph(int V , int E){
+        this.V = V ;
+        this.E = E ;
+    }
+    public Graph(){}
+
 
 
     public int[][] adjListToMatrix(LinkedList adjList[]){

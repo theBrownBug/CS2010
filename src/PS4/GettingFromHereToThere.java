@@ -5,9 +5,9 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.io.*;
 
-// write your matric number here:
-// write your name here:
-// write list of collaborators here:
+// write your matric number here: A0192770Y
+// write your name here: Eeshan Jaiswal
+// write list of collaborators here: GeeksforGeeks
 // year 2019 hash code: fHsMPpQw4arRphSwbU8Q (do NOT delete this line) <-- change this
 
     class GettingFromHereToThere {
@@ -125,34 +125,13 @@ import java.io.*;
 
         // --------------------------------------------
 
-        public GettingFromHereToThere() {
-            // Write necessary codes during construction;
-            //
-            // write your answer here
-
-
-
-        }
-
-        void PreProcess() {
-            // write your answer here
-            // you can leave this method blank if you do not need it
-
-
-        }
+        public GettingFromHereToThere() { }
+        void PreProcess() { }
 
         int Query(int source, int destination) {
             int ans = 0;
 
             ans = PrimMST(source, destination);
-
-            // You have to report the weight of a corridor (an edge)
-            // which has the highest effort rating in the easiest path from source to destination for the wheelchair bound
-            //
-            // write your answer here
-
-
-
             return ans;
         }
 
