@@ -23,6 +23,15 @@ public class BellmanFord {
         // initialise the source as 0 ;
         distances[source] = 0 ;
 
+        // relax the all the vertices V -1 Times
+        for(int i = 0; i < graph.getV() ; i++){
+            for(int j = 0 ; j<graph.E ; j++){
+
+                int u = graph.edges[j].s
+            }
+        }
+
+
     }
 
     class Node {
@@ -44,7 +53,8 @@ public class BellmanFord {
             int distance ;
             public Edge(){
                 this.destination = null ;
-                this.distance = 0 ;
+                this.distance = Integer.MAX_VALUE ;
+
             }
             public Edge(Node destination , int distance){
                 this.destination = destination ;
@@ -92,6 +102,7 @@ public class BellmanFord {
                 }
             }
         }
+
 
     }
 
