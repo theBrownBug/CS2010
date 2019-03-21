@@ -120,6 +120,49 @@ import java.io.*;
 
 
         int PrimMST(int source , int target) {
+
+
+            Boolean[] mstSet = new Boolean[AdjList.size()];
+            this.node = new Node[AdjList.size()] ;
+            int[] parent = new int[AdjList.size()];
+            for (int counter = 0; counter < AdjList.size(); counter++) {
+                mstSet[counter] = false;
+                node[counter] = new Node() ;
+                node[counter].key = Integer.MAX_VALUE;
+                node[counter].vertex = counter;
+                parent[counter] = -1;
+            }
+
+            // beginning point of the mst Tree
+            mstSet[0] = true;
+            // give min value to the beginning point of the min heap
+            node[source].key = 0;
+            node[source].previous= null ;
+
+            PriorityQueue<Node> queue = new PriorityQueue<>(AdjList.size());
+            // add all the nodes in the priority queue
+            for (Node n : node)
+                queue.add(n);
+            while (!queue.isEmpty()) {
+                Node extract = queue.poll();
+                // include the vertex in the MST SET
+                mstSet[extract.vertex] = true;
+                Vector current = AdjList.get(extract.vertex);
+                for (int counter = 0; counter < current.size(); counter++) {
+                    IntegerPair i = (IntegerPair) current.get(counter);
+                    if (!mstSet[i.getDestination()]) {
+                        // update the weights
+                        if (node[i.getDestination()].getKey() > i.getWeight()) {
+                            queue.remove(node[i.getDestination()]);
+                            node[i.getDestination()].key = i.weight;
+                            node[i.getDestination()].previous = extract;
+                            queue.add(node[i.getDestination()]);
+                            parent[i.getDestination()] = extract.vertex;
+                        }
+                    }
+                }
+
+            }
             Node t = null;
             for (Node n : node){
                 if (n.getVertex() == target)
@@ -150,47 +193,9 @@ import java.io.*;
         // has to return a graph
 
         void PreProcess() {
-            Boolean[] mstSet = new Boolean[AdjList.size()];
-            this.node = new Node[AdjList.size()] ;
-            int[] parent = new int[AdjList.size()];
-            for (int counter = 0; counter < AdjList.size(); counter++) {
-                mstSet[counter] = false;
-                node[counter] = new Node() ;
-                node[counter].key = Integer.MAX_VALUE;
-                node[counter].vertex = counter;
-                parent[counter] = -1;
-            }
 
-            // beginning point of the mst Tree
-            mstSet[0] = true;
-            // give min value to the beginning point of the min heap
-            node[0].key = 0;
-            node[0].previous= null ;
 
-            PriorityQueue<Node> queue = new PriorityQueue<>(AdjList.size());
-            // add all the nodes in the priority queue
-            for (Node n : node)
-                queue.add(n);
-            while (!queue.isEmpty()) {
-                Node extract = queue.poll();
-                // include the vertex in the MST SET
-                mstSet[extract.vertex] = true;
-                Vector current = AdjList.get(extract.vertex);
-                for (int counter = 0; counter < current.size(); counter++) {
-                    IntegerPair i = (IntegerPair) current.get(counter);
-                    if (!mstSet[i.getDestination()]) {
-                        // update the weights
-                        if (node[i.getDestination()].getKey() > i.getWeight()) {
-                            queue.remove(node[i.getDestination()]);
-                            node[i.getDestination()].key = i.weight;
-                            node[i.getDestination()].previous = extract;
-                            queue.add(node[i.getDestination()]);
-                            parent[i.getDestination()] = extract.vertex;
-                        }
-                    }
-                }
-
-            }
+            /*
 
             Graph graph = new Graph(this.AdjList.size()) ;
             IntegerTriple[] bestPaths = new IntegerTriple[];
@@ -210,6 +215,8 @@ import java.io.*;
             for(int counter = 0 ; counter< node.length ; counter++){
 
             }
+
+            */
 
         }
 
