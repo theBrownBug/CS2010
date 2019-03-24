@@ -4,9 +4,11 @@ package PS5;
 import java.util.*;
 import java.io.*;
 
-// write your matric number here:
-// write your name here:
-// write list of collaborators here:
+
+
+// write your matric number here: A0192770Y
+// write your name here: Eeshan Jaiswal
+// write list of collaborators here: Geeks For Geeks
 // year 2018 hash code: psJ6yCZMN7uwQv79EtpQ (do NOT delete this line)
 
 class Bleeding {
@@ -14,32 +16,111 @@ class Bleeding {
     private int Q; // number of queries
     private Vector < Vector < IntegerPair > > AdjList; // the weighted graph (the Singapore map), the length of each edge (road) is stored here too, as the weight of edge
 
-    // if needed, declare a private data structure here that
-    // is accessible to all methods in this class
-    // --------------------------------------------
+
+    class IntegerPair implements Comparable<IntegerPair>{
+        int weight ;
+        int destination ;
+        public IntegerPair(int destination , int weight){
+            this.destination = destination ;
+            this.weight = weight ;
+        }
+        public int getWeight() { return weight; }
+        public int getDestination() { return destination; }
+        @Override
+        public int compareTo(IntegerPair o) {
+            if  (this.getDestination() != (o.getDestination()))
+                return this.getDestination() - o.getDestination();
+            else
+                return this.getWeight() - o.getWeight();
+        }
+    }
 
 
 
-    // --------------------------------------------
+    class Edge {
+        int source , destination , weight ;
+        public Edge(int source , int destination ,int weight){
+            this.destination  = destination ;
+            this.source = source ;
+            this.weight = weight ;
+        }
+        public Edge(){
+            this.destination  = this.source = this.weight = 0 ;
+        }
+        public int getSource() { return source; }
+        public void setSource(int source) { this.source = source; }
+        public int getDestination() { return destination; }
+        public void setDestination(int destination) { this.destination = destination; }
+        public int getWeight() { return weight; }
+        public void setWeight(int weight) { this.weight = weight; }
+    }
+
+
+/*
+    class Node implements Comparable<Node>{
+        int vertex ;
+        int key ;
+        Node previous ;
+        public int getVertex() { return vertex; }
+        public int getKey() { return key; }
+        public int getPrevious(){return this.previous.getVertex() ; }
+        @Override
+        public int compareTo(Node o) {
+            return this.getKey() - o.getKey();
+        }
+    }
+
+
+*/
 
     public Bleeding() {
-        // Write necessary code during construction
-        //
-        // write your answer here
+
+    }
+
+
+
+
+    void Djikstra(int source){
+        boolean[]shortestPath = new boolean[AdjList.size()] ;
+        int[] distance = new int[AdjList.size()] ;
+        for(int i: distance){
+            i = Integer.MAX_VALUE ;
+        }
+
+
+        PriorityQueue<HashMap<Integer, Integer>> queue = new HashMap<Integer,Integer>(AdjList.size() , new Comparator<HashMap<Integer, Integer>>(){
+            @Override
+            public int compare(HashMap<Integer, Integer> o1, HashMap<Integer, Integer> o2) {
+                return  o1.
+            }
+        }) ;
+
+        /*
+        PriorityQueue<Edge> queue = new PriorityQueue<>(AdjList.size());
+        Edge sourceNode = new Edge() ;
+        sourceNode.source = source ;
+        sourceNode.distance =  0 ;
+        distance[source] = 0 ;
+        */
+        queue.offer(sourceNode) ;
+
+        while(!queue.isEmpty()){
+
+            Node extractedNode = queue.poll() ;
+            int vertex = extractedNode.getVertex() ;
+            if(!shortestPath[vertex]) {
+                shortestPath[vertex] = true;
+                Vector current = AdjList.get(vertex) ;
+
+            }
+        }
 
 
 
     }
 
     void PreProcess() {
-        // Write necessary code to preprocess the graph, if needed
-        //
-        // write your answer here
-        //-------------------------------------------------------------------------
 
-
-
-        //-------------------------------------------------------------------------
     }
 
     int Query(int s, int t, int k) {
@@ -147,23 +228,3 @@ class IntegerScanner { // coded by Ian Leow, using any other I/O method is not r
     }
 }
 
-
-
-class IntegerPair implements Comparable < IntegerPair > {
-    Integer _first, _second;
-
-    public IntegerPair(Integer f, Integer s) {
-        _first = f;
-        _second = s;
-    }
-
-    public int compareTo(IntegerPair o) {
-        if (!this.first().equals(o.first()))
-            return this.first() - o.first();
-        else
-            return this.second() - o.second();
-    }
-
-    Integer first() { return _first; }
-    Integer second() { return _second; }
-}
