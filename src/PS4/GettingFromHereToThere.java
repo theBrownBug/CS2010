@@ -120,8 +120,6 @@ import java.io.*;
 
 
         int PrimMST(int source , int target) {
-
-
             Boolean[] mstSet = new Boolean[AdjList.size()];
             this.node = new Node[AdjList.size()] ;
             int[] parent = new int[AdjList.size()];
@@ -364,4 +362,5 @@ import java.io.*;
         Integer third() { return _third; }
     }
 
+*/
 
