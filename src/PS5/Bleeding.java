@@ -3,6 +3,7 @@ package PS5;
 // Copy paste this Java Template and save it as "Bleeding.java"
 import java.util.*;
 import java.io.*;
+import
 
 
 
@@ -88,7 +89,7 @@ class Bleeding {
         }
 
 
-        PriorityQueue<HashMap<Integer, Integer>> queue = new HashMap<Integer,Integer>(AdjList.size() , new Comparator<HashMap<Integer, Integer>>(){
+        PriorityQueue<Has<>> queue = new HashMap<Integer,Integer>(AdjList.size() , new Comparator<HashMap<Integer, Integer>>(){
             @Override
             public int compare(HashMap<Integer, Integer> o1, HashMap<Integer, Integer> o2) {
                 return  o1.
